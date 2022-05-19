@@ -1,40 +1,81 @@
 import {useState} from 'react';
 import axios from 'axios';
 import styled from 'styled-components'
+import Seats from './Seats'
+import Footer from './Footer'
 
 
-// function EachTime ({weekday, date, showtimes, name}) {
-//     return (
-//         <div className="timeoption">
-//             <p>{weekday} - {date}</p>
-//             <button>{showtimes}</button>
-//             <button>{name}</button>
-//         </div>
-//     );
-// }
+const times = [
+    {
+        weekday: "Quarta-feira",
+        date: "25/06/2021",
+        name: "14:00",
+        id: 1
+    },
+    {
+        weekday: "Quinta-feira",
+        date: "24/06/2021",
+        name: "15:00",
+        id: 2
+    },
+    {
+        weekday: "Sexta-feira",
+        date: "26/06/2021",
+        name: "15:00",
+        id: 3
+    },
+    {
+        weekday: "Sábado",
+        date: "27/06/2021",
+        name: "15:00",
+        id: 4
+    },
+    {
+        weekday: "Domingo",
+        date: "28/06/2021",
+        name: "15:00",
+        id: 5
+    },
+    {
+        weekday: "Segunda-feira",
+        date: "29/06/2021",
+        name: "15:00",
+        id: 6
+    },
+]
 
-export default function Timetable({ setVisible }) {
+
+
+function EachTime ({weekday, date, name, setNextpage}) {
+    return (
+        <Timeoption>
+            <p>{weekday} - {date}</p>
+            <button onClick={() => setNextpage(true)}>{name}</button>
+        </Timeoption>
+    );
+}
+
+export default function Timetable () {
+
+    const [nextpage, setNextpage] = useState(false);
 
     return (
         <>
-            <Mainscreen>
-                <Maintitle>
-                    <h2>Selecione o horário</h2>
-                </Maintitle>
-                <Timetablelist>
-
-                    <Timeoption>
-                        <p>Terça-feira - 26/06/2022</p>
-                        <button>hh:mm</button>
-                        <button>hh:mm</button>
-                    </Timeoption>
-                    <Timeoption>
-                        <p>Quarta-feira - 27/06/2022</p>
-                        <button>55:55</button>
-                        <button>hh:mm</button>
-                    </Timeoption>
-                </Timetablelist>
-            </Mainscreen>
+            {!nextpage ? (
+                <div>
+                    <Mainscreen>
+                        <Maintitle>
+                            <h2>Selecione o horário</h2>
+                        </Maintitle>
+                        <Timetablelist>
+                            {times.map((time, index) => <EachTime key={index} setNextpage={setNextpage} weekday={time.weekday} date={time.date} name={time.name}/>)}
+                        </Timetablelist>
+                    </Mainscreen>
+                    <Footer />
+                </div>
+                    ) : (
+                    <Seats />
+                    )}
         </>
     );
 }
@@ -45,6 +86,8 @@ const Mainscreen = styled.div `
     justify-content: space-around;
     align-items: center;
     margin-top: 67px;
+    margin-bottom: 100px;
+    overflow-x: hidden;
 `
 
 const Maintitle = styled.div `
@@ -88,5 +131,10 @@ const Timeoption = styled.div `
         border: none;
         border-radius: 3px;
         margin-right: 8px;
+    }
+
+    button:hover {
+        cursor:pointer;
+        opacity: 0.7;
     }
 `

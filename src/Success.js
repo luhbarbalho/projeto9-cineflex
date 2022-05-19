@@ -26,7 +26,7 @@ export default function Success () {
                         <p>Nome: João da Silva Sauro</p>
                         <p>CPF: 123.456.789-10</p>
                     </Infotitle>
-                    <button>Voltar para home</button>
+                    <Button>Voltar para home</Button>
                 </Pedidolist>
             </Mainscreen>
         </>
@@ -39,7 +39,7 @@ const Mainscreen = styled.div `
     justify-content: space-around;
     align-items: center;
     margin-top: 67px;
-    display:none;
+
 `
 
 const Maintitle = styled.div `
@@ -48,7 +48,7 @@ const Maintitle = styled.div `
     display: flex;
     align-items: center;
     justify-content: center;
-    
+
     h2 {
         font-size: 24px;
         font-family: 'Roboto';
@@ -57,6 +57,7 @@ const Maintitle = styled.div `
         text-align:center;
         color: #247A6B;
         font-weight: 700;
+    }
 `
 
 const Pedidolist = styled.div `
@@ -89,13 +90,12 @@ const Infotitle = styled.div `
         font-size: 22px;
         line-height: 30px;
     }
-
-    button {
-        height: 42px;
-        width: 225px;
-        background-color: #E8833A;
-        border: none;
-        color: white;
-        border-radius: 3px;
-    }
+`
+const Button = styled.button `
+    height: 42px;
+    width: 225px;
+    background-color: #E8833A;
+    border: none;
+    color: white;
+    border-radius: 3px;
 `

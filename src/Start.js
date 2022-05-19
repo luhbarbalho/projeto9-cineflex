@@ -34,6 +34,8 @@ const movies = [
 ];
 
 function EachMovie ({id, title, posterURL, overview, releaseDate, setVisible}) {
+
+    
     return (
         <Movieborder onClick={() => setVisible(false)}>
             <Picture>
@@ -89,21 +91,7 @@ const Movieslist = styled.div `
     align-items: center;
     flex-wrap: wrap;
     margin: 0 130px 20px 130px;
-    background-color: crimson;
 `
-
-const Picture = styled.div `
-    width: 129px;
-    height: 193px;
-
-
-
-    img {
-        width: 129px;
-        height: 193px;
-    }
-`
-
 
 const Movieborder = styled.div `
     width: 145px;
@@ -112,11 +100,22 @@ const Movieborder = styled.div `
     justify-content: center;
     align-items: center;
     margin: 11px 15px;
-    background-color: rgb(255, 204, 204);
+    background-color: #ffffff;
     border-radius: 3px;
     box-shadow: 0px 2px 4px 2px #0000001A;
 
     :hover {
         cursor:pointer;
+        opacity: 0.8;
+    }
+`
+
+const Picture = styled.div `
+    width: 129px;
+    height: 193px;
+
+    img {
+        width: 129px;
+        height: 193px;
     }
 `

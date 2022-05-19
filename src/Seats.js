@@ -1,6 +1,8 @@
 import {useState} from 'react';
 import axios from 'axios';
-import styled from 'styled-components'
+import styled from 'styled-components';
+import Success from './Success';
+import Footer from './Footer';
 
 const balls = [
     {
@@ -26,58 +28,65 @@ const balls = [
     }
 ]
 
-function Eachseat ({seat}) {
-
-    const [selecionado, setSelecionado] = useState(true);
+function Eachseat ({ seat, setNextpage }) {
 
     return (
-        <Ball onClick={() => setSelecionado(!selecionado)}>
+        <Ball onClick={() => setNextpage(true)}>
             <p>{seat}</p>
         </Ball>
     );
 }
 
 
-export default function Seats({selecionado}) {
+export default function Seats () {
+
+    const [nextpage, setNextpage] = useState(false);
 
     return (
         <>
-            <Mainscreen>
-                <Maintitle>
-                    <h2>Selecione o(s) assento(s)</h2>
-                </Maintitle>
+            {!nextpage ? (
+                <div>
+                    <Mainscreen>
+                        <Maintitle>
+                            <h2>Selecione o(s) assento(s)</h2>
+                        </Maintitle>
 
-                <Seatlist>
-                    {balls.map((ball, index) => <Eachseat key={index} seat={ball.seat} selecionado={selecionado}/>)}
-                </Seatlist>
+                        <Seatlist>
+                            {balls.map((ball, index) => <Eachseat key={index} seat={ball.seat} setNextpage={setNextpage}/>)}
+                        </Seatlist>
 
-                <Seattypes>
-                    <Type>
-                        <BallGreen></BallGreen>
-                        <p>Selecionado</p>
-                    </Type>
-                    <Type>
-                        <BallGray></BallGray>
-                        <p>Disponível</p>
-                    </Type>
-                    <Type>
-                        <BallYellow></BallYellow>
-                        <p>Indisponível</p>
-                    </Type>
-                </Seattypes>
+                        <Seattypes>
+                            <Type>
+                                <BallGreen></BallGreen>
+                                <p>Selecionado</p>
+                            </Type>
+                            <Type>
+                                <BallGray></BallGray>
+                                <p>Disponível</p>
+                            </Type>
+                            <Type>
+                                <BallYellow></BallYellow>
+                                <p>Indisponível</p>
+                            </Type>
+                        </Seattypes>
 
-                <Form method="post" action="guardar-info-ex">
-                    <Fieldset>
-                        <Label for="nome">Nome do comprador:</Label>
-                        <Input type="text" name="nome" id="nome" placeholder="  Digite seu nome aqui." tabIndex="2"/>
-                        <Label for="nome">CPF do comprador:</Label>
-                        <Input type="text" name="nome" id="nome" placeholder="  Digite seu nome aqui." tabIndex="2"/>
-                        <Btn>
-                            <Input type="submit" name="enviar" value="Reservar assento(s)"/>
-                        </Btn>
-                    </Fieldset>
-                </Form>
-            </Mainscreen>
+                        <Form method="post" action="guardar-info-ex">
+                            <Fieldset>
+                                <Label for="nome">Nome do comprador:</Label>
+                                <Input type="text" name="nome" id="nome" placeholder="  Digite seu nome aqui." tabIndex="2"/>
+                                <Label for="nome">CPF do comprador:</Label>
+                                <Input type="text" name="nome" id="nome" placeholder="  Digite seu nome aqui." tabIndex="2"/>
+                                <Btn>
+                                    <Input type="submit" name="enviar" value="Reservar assento(s)"/>
+                                </Btn>
+                            </Fieldset>
+                        </Form>
+                    </Mainscreen>
+                    <Footer />
+                </div>
+                ) : (
+                <Success />
+            )}
         </>
     );
 }
@@ -88,7 +97,7 @@ const Mainscreen = styled.div `
     justify-content: space-around;
     align-items: center;
     margin-top: 67px;
-    display:none;
+    overflow-x: hidden;
 `
 
 const Maintitle = styled.div `
