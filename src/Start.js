@@ -1,52 +1,31 @@
-import {useState} from 'react';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components'
+import loading from './assets/loading.gif'
 
-const movies = [
-    {
-        id: 1,
-        title: "2067",
-        posterURL: "https://image.tmdb.org/t/p/w500/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg",
-        overview: "A lowly utility worker is called to the future by a mysterious radio signal, he must leave his dying wife to embark on a journey that will force him to face his deepest fears in an attempt to change the fabric of reality and save humankind from its greatest environmental crisis yet.",
-        releaseDate: "2020-10-01T00:00:00.000Z",
-    },
-    {
-        id: 2,
-        title: "2067",
-        posterURL: "https://image.tmdb.org/t/p/w500/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg",
-        overview: "A lowly utility worker is called to the future by a mysterious radio signal, he must leave his dying wife to embark on a journey that will force him to face his deepest fears in an attempt to change the fabric of reality and save humankind from its greatest environmental crisis yet.",
-        releaseDate: "2020-10-01T00:00:00.000Z",
-    },
-    {
-        id: 3,
-        title: "2067",
-        posterURL: "https://image.tmdb.org/t/p/w500/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg",
-        overview: "A lowly utility worker is called to the future by a mysterious radio signal, he must leave his dying wife to embark on a journey that will force him to face his deepest fears in an attempt to change the fabric of reality and save humankind from its greatest environmental crisis yet.",
-        releaseDate: "2020-10-01T00:00:00.000Z",
-    },
-    {
-        id: 4,
-        title: "2067",
-        posterURL: "https://image.tmdb.org/t/p/w500/7D430eqZj8y3oVkLFfsWXGRcpEG.jpg",
-        overview: "A lowly utility worker is called to the future by a mysterious radio signal, he must leave his dying wife to embark on a journey that will force him to face his deepest fears in an attempt to change the fabric of reality and save humankind from its greatest environmental crisis yet.",
-        releaseDate: "2020-10-01T00:00:00.000Z",
-    },
-];
+function EachMovie ({ setVisible , posterURL, title }) {
 
-function EachMovie ({id, title, posterURL, overview, releaseDate, setVisible}) {
-
-    
     return (
         <Movieborder onClick={() => setVisible(false)}>
             <Picture>
-                <img src={posterURL} alt="poster do filme"/>
+                <img src={posterURL} alt={title}/>
             </Picture>
         </Movieborder>
     );
 }
 
+export default function Start({ setVisible, posterURL, title }) {
 
-export default function Start({ setVisible }) {
+    const [movies, setMovies] = useState([]);
+
+    useEffect(() => {
+        const request = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies");
+
+        request.then(response => {
+            console.log("response.data")
+            setMovies([...response.data])
+        })
+    }, []);
 
     return (
         <>
@@ -55,7 +34,9 @@ export default function Start({ setVisible }) {
                     <h2>Selecione o filme</h2>
                 </Maintitle>
                 <Movieslist>
-                    {movies.map((movie, index) => <EachMovie key={index} setVisible={setVisible} posterURL={movie.posterURL} title={movie.title}/>)}
+                    {movies.length === 0 ? <img width="100px" height="100px" src={loading}/> :
+                        movies.map((movie, index) => <EachMovie key={index} setVisible={setVisible} posterURL={movie.posterURL} title={movie.title} 
+                    />)}
                 </Movieslist>
             </Mainscreen>
         </>
@@ -87,6 +68,7 @@ const Maintitle = styled.div `
 
 const Movieslist = styled.div `
     display: flex;
+    max-width: 900px;
     justify-content: center;
     align-items: center;
     flex-wrap: wrap;
