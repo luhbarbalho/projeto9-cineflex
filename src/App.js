@@ -6,6 +6,7 @@ import Start from './Start'
 import Timetable from './Timetable';
 import Seats from './Seats';
 import Footer from './Footer';
+import Success from './Success';
 
 
 export default function App() {
@@ -30,7 +31,7 @@ export default function App() {
 
                 <Route path="/assentos/:idSessao" element={<Seats />}/>
 
-                {/* { visible ? <Start setVisible={setVisible}/> : <Timetable />} */}
+                <Route path="/sucesso" element={<Success />}/>
 
             </Routes>
         </BrowserRouter>

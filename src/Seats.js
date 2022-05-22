@@ -2,7 +2,6 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import Success from './Success';
 import Footer from './Footer';
 import loading from './assets/loading.gif';
 
@@ -17,15 +16,25 @@ export default function Seats () {
         const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
 
         request.then(response => {
-            setChairs(response.data.seats);
+            setChairs(response.data);
             console.log("alo", chairs)
         })
+
+        request.catch((err) => {
+            alert("ops!");
+            console.log(err.response)
+        })
+
     }, []);
 
-    function EachSeat ({ seats }) {
+    function EachSeat ({ name, seats }) {
+
+
         return (
             <Ball>{/*Precisa acumular e levar ao sucess*/}
-                <p>{seats}</p>
+                <p >
+                    {name}
+                </p>
             </Ball>
         );
     }
@@ -33,19 +42,19 @@ export default function Seats () {
     // ESCOLHA DO ASSENTO
 
 
-    // DADOS DO CLIENTE NO FORM
-    const [nameForm, setNameForm] = useState('');
-    const [cpfForm, setCpfForm] = useState('');
+    // // DADOS DO CLIENTE NO FORM
+    // const [nameForm, setNameForm] = useState('');
+    // const [cpfForm, setCpfForm] = useState('');
 
-    function SubmitForm (event) {
-        event.preventDefault();
-        const data = {
-            nameForm: nameForm,
-            cpfForm: cpfForm,
-        }
-        console.log(data);
-    }
-    // DADOS DO CLIENTE NO FORM
+    // function SubmitForm (event) {
+    //     event.preventDefault();
+    //     const data = {
+    //         nameForm: nameForm,
+    //         cpfForm: cpfForm,
+    //     }
+    //     console.log(data);
+    // }
+    // // DADOS DO CLIENTE NO FORM
 
     return (
         <>
@@ -55,11 +64,15 @@ export default function Seats () {
                 </Maintitle>
 
                 <Seatlist>
+
                 {chairs.length === 0 ? 
-                        <img width="100px" height="100px" src={loading}/> 
-                        : 
-                        chairs.map((chair, index) => <EachSeat key={index} seats={chair.seats} id={chair.id}
+                    <img width="100px" height="100px" src={loading}/> 
+
+                    : 
+
+                    chairs.seats.map(chair => <EachSeat key={chair.id} seats={chair.seats} name={chair.name} id={chair.id}
                     />)}
+
                 </Seatlist>
 
                 <Seattypes>
@@ -77,7 +90,7 @@ export default function Seats () {
                     </Type>
                 </Seattypes>
 
-                <Form onSubmit={SubmitForm}action="guardar-info-ex-em-um-site">
+                {/* <Form onSubmit={SubmitForm}action="guardar-info-ex-em-um-site">
                     {nameForm}
                     <Label htmlFor="nome">Nome do comprador:</Label>
                     <Input type="text"  id="nome" placeholder="  Digite seu nome aqui." tabIndex="1" onChange={(e) => setNameForm(e.target.value)} value={nameForm} required />
@@ -86,10 +99,12 @@ export default function Seats () {
                     <Label htmlFor="CPF">CPF do comprador:</Label>
                     <Input type="text" id="CPF" placeholder="  Digite seu nome aqui." tabIndex="2" onChange={(e) => setCpfForm(e.target.value)} value={cpfForm} required />
                     <Btn>
-                        <Button type="submit" name="enviar">Reservar assento(s)</Button>
+                        <Link to={`/sucesso`}>
+                            <Button type="submit" name="enviar">Reservar assento(s)</Button>
+                        </Link>
                     </Btn>
 
-                </Form>
+                </Form> */}
             </Mainscreen>
             <Footer />                
         </>
@@ -142,17 +157,37 @@ const Ball = styled.div `
     display: flex;
     justify-content: center;
     align-items: center;
-    border: 0.5px solid #808F9D;
+    border: 1px solid ${props => props.selecionado ? 'yellow' : '#808F9D'};
     border-radius: 50%;
-    background-color: ${props => props.selecionado ? 'yellow' : '#1AAE9E'};
+    color: white;
+    background-color: ${props => props.selecionado ? 'yellow' : '#C3CFD9'};
     font-size: 11px;
     line-height: 13px;
-
+    
+    &:active{
+        transform: translateY(1px);
+    }
     &:hover{
         cursor: pointer;
-        opacity: 0.7;
+        filter: brightness(1.1);
     }
 `
+
+
+
+    //{ border: 0.5px solid #808F9D;
+    // background-color: #C3CFD9;
+// }
+
+// .buttonUnvailable {
+    // border: 0.5px solid #F7C52B;
+    // background-color: #FBE192;
+// }
+
+// .buttonSelected {
+//     background-color: #8DD7CF;
+//     border: 1px solid #1AAE9E;
+// }
 
 // tipos de assentos
 

@@ -9,45 +9,46 @@ import loading from './assets/loading.gif';
 export default function Timetable () {
     
 
-    function EachTime ({ schedules, weekday, id, date, name }) {
+    function EachTime ({ weekday, id, date, name, showtimes}) {
         return (
             <Timeoption>
                 <p>{weekday} - {date}</p> 
                 
-                {shoowtimes.length === 0 ? 
-                "" : 
-                shoowtimes.map((showtime, index) => <EachButton key={index} name={showtime.name} id={showtime.id} />)}
-                
+                {showtimes.length === 0 ? 
+                        <img width="100px" height="100px" src={loading} alt="loading"/> 
+                        
+                        : 
+
+                        showtimes.map(showtime => <EachButton key={showtime.id} name={showtime.name} id={showtime.id}
+                    />)} 
             </Timeoption>
         );
     }
 
 
-    function EachButton ({ name, id}){
+    function EachButton ({ name, id, showtimes } ){
         return (
             <Link to={`/assentos/${id}`}>
-                <button>
-                    {name}
-                </button>
+                <button>{name}</button>
             </Link>
         );
     }
 
     const [schedules, setSchedules] = useState([]);
-    const [shoowtimes, setShoowtimes] = useState([])
     const { idFilme }  = useParams();
 
     useEffect(() => {
         const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
 
         request.then(response => {
-            setSchedules(response.data.days)
+            setSchedules([...response.data.days])
+            console.log('entrou', schedules)
+        });
+        request.catch((err) => {
+            alert("ops!");
+            console.log(err.response)
         })
-        
-        request.then(response => {
-            setShoowtimes(response.data.days[0].showtimes)
-            console.log(response.data)
-        })
+
     }, []);
     
 
@@ -59,9 +60,11 @@ export default function Timetable () {
                 </Maintitle>
                 <Timetablelist>
                     {schedules.length === 0 ? 
-                        <img width="100px" height="100px" src={loading}/> : 
+                        <img width="100px" height="100px" src={loading} alt="loading"/> 
+                        
+                        : 
 
-                        schedules.map((schedule, index) => <EachTime key={index} weekday={schedule.weekday} date={schedule.date}
+                        schedules.map(schedule => <EachTime key={schedule.id} weekday={schedule.weekday} date={schedule.date} showtimes={schedule.showtimes}
                     />)}
                 </Timetablelist>
             </Mainscreen>

@@ -28,6 +28,12 @@ export default function Start() {
         request.then(response => {
             setMovies([...response.data])
         })
+        
+        request.catch((err) => {
+            alert("ops!");
+            console.log(err.response)
+        })
+
     }, []);
 
     return (
@@ -38,7 +44,7 @@ export default function Start() {
                 </Maintitle>
                 <Movieslist>
                     {movies.length === 0 ? <img width="100px" height="100px" src={loading}/> :
-                        movies.map((movie, index) => <EachMovie key={index}  posterURL={movie.posterURL} title={movie.title} id={movie.id}
+                        movies.map(movie => <EachMovie key={movie.id}  posterURL={movie.posterURL} title={movie.title} id={movie.id}
                     />)}
                 </Movieslist>
             </Mainscreen>

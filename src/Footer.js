@@ -1,18 +1,24 @@
 import styled from 'styled-components'
+// import { useParams, Link } from 'react-router-dom';
+// import axios from 'axios';
+// import { useState, useEffect } from 'react';
+// import Footer from './Footer'
+// import loading from './assets/loading.gif';
 
 export default function Footer () {
+
 
     return (
         <>
             <Footers>
                 <Cart>
-                    <Movieborder>
+                    {/* <Movieborder>
                         <Picture>
-                            g
+                            {movie.posterURL}
                         </Picture>
                     </Movieborder>
-                    <MovieInfo><p>Enola Holmes</p>
-                    <p>Segunda-feira - 15:00</p></MovieInfo>
+                    <MovieInfo><p>{movie.title}</p>
+                    <p>{schedule.weekday} - {schedule.name}</p></MovieInfo> */}
                 </Cart>
             </Footers>
         </>
