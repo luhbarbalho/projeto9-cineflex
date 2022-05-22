@@ -1,81 +1,71 @@
-import {useState} from 'react';
+import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import { useState, useEffect } from 'react';
 import styled from 'styled-components'
-import Seats from './Seats'
 import Footer from './Footer'
+import loading from './assets/loading.gif';
 
-
-const times = [
-    {
-        weekday: "Quarta-feira",
-        date: "25/06/2021",
-        name: "14:00",
-        id: 1
-    },
-    {
-        weekday: "Quinta-feira",
-        date: "24/06/2021",
-        name: "15:00",
-        id: 2
-    },
-    {
-        weekday: "Sexta-feira",
-        date: "26/06/2021",
-        name: "15:00",
-        id: 3
-    },
-    {
-        weekday: "Sábado",
-        date: "27/06/2021",
-        name: "15:00",
-        id: 4
-    },
-    {
-        weekday: "Domingo",
-        date: "28/06/2021",
-        name: "15:00",
-        id: 5
-    },
-    {
-        weekday: "Segunda-feira",
-        date: "29/06/2021",
-        name: "15:00",
-        id: 6
-    },
-]
-
-
-
-function EachTime ({weekday, date, name, setNextpage}) {
-    return (
-        <Timeoption>
-            <p>{weekday} - {date}</p>
-            <button onClick={() => setNextpage(true)}>{name}</button>
-        </Timeoption>
-    );
-}
 
 export default function Timetable () {
+    
 
-    const [nextpage, setNextpage] = useState(false);
+    function EachTime ({ schedules, weekday, id, date, name }) {
+        return (
+            <Timeoption>
+                <p>{weekday} - {date}</p> 
+                
+                {shoowtimes.length === 0 ? 
+                "" : 
+                shoowtimes.map((showtime, index) => <EachButton key={index} name={showtime.name} id={showtime.id} />)}
+                
+            </Timeoption>
+        );
+    }
+
+
+    function EachButton ({ name, id}){
+        return (
+            <Link to={`/assentos/${id}`}>
+                <button>
+                    {name}
+                </button>
+            </Link>
+        );
+    }
+
+    const [schedules, setSchedules] = useState([]);
+    const [shoowtimes, setShoowtimes] = useState([])
+    const { idFilme }  = useParams();
+
+    useEffect(() => {
+        const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
+
+        request.then(response => {
+            setSchedules(response.data.days)
+        })
+        
+        request.then(response => {
+            setShoowtimes(response.data.days[0].showtimes)
+            console.log(response.data)
+        })
+    }, []);
+    
 
     return (
         <>
-            {!nextpage ? (
-                <div>
-                    <Mainscreen>
-                        <Maintitle>
-                            <h2>Selecione o horário</h2>
-                        </Maintitle>
-                        <Timetablelist>
-                            {times.map((time, index) => <EachTime key={index} setNextpage={setNextpage} weekday={time.weekday} date={time.date} name={time.name}/>)}
-                        </Timetablelist>
-                    </Mainscreen>
-                    <Footer />
-                </div>
-                    ) : (
-                    <Seats />
-                    )}
+            <Mainscreen>
+                <Maintitle>
+                    <h2>Selecione o horário</h2>
+                </Maintitle>
+                <Timetablelist>
+                    {schedules.length === 0 ? 
+                        <img width="100px" height="100px" src={loading}/> : 
+
+                        schedules.map((schedule, index) => <EachTime key={index} weekday={schedule.weekday} date={schedule.date}
+                    />)}
+                </Timetablelist>
+            </Mainscreen>
+            <Footer />
         </>
     );
 }
@@ -110,8 +100,13 @@ const Timetablelist = styled.div `
     height: auto;
     display: flex;
     flex-direction: column;
+    /* align-items: center; ver isso tb*/
     margin-bottom: 20px;
-    padding-left: 25px;
+    padding-left: 25px; //ver isso
+
+    img {
+        margin-left: 110px
+    }
 `
 
 const Timeoption = styled.div `

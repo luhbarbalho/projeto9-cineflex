@@ -1,28 +1,31 @@
 import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
-import styled from 'styled-components'
-import loading from './assets/loading.gif'
+import styled from 'styled-components';
+import loading from './assets/loading.gif';
 
-function EachMovie ({ setVisible , posterURL, title }) {
+function EachMovie ({ posterURL, title, id }) {
 
     return (
-        <Movieborder onClick={() => setVisible(false)}>
-            <Picture>
-                <img src={posterURL} alt={title}/>
-            </Picture>
-        </Movieborder>
+        <Link to={`/sessoes/${id}`}>
+            <Movieborder>
+                <Picture>
+                    <img src={posterURL} alt={title}/>
+                </Picture>
+            </Movieborder>
+        </Link>
+
     );
 }
 
-export default function Start({ setVisible, posterURL, title }) {
+export default function Start() {
 
     const [movies, setMovies] = useState([]);
 
     useEffect(() => {
-        const request = axios.get("https://mock-api.driven.com.br/api/v5/cineflex/movies");
+        const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies`);
 
         request.then(response => {
-            console.log("response.data")
             setMovies([...response.data])
         })
     }, []);
@@ -35,7 +38,7 @@ export default function Start({ setVisible, posterURL, title }) {
                 </Maintitle>
                 <Movieslist>
                     {movies.length === 0 ? <img width="100px" height="100px" src={loading}/> :
-                        movies.map((movie, index) => <EachMovie key={index} setVisible={setVisible} posterURL={movie.posterURL} title={movie.title} 
+                        movies.map((movie, index) => <EachMovie key={index}  posterURL={movie.posterURL} title={movie.title} id={movie.id}
                     />)}
                 </Movieslist>
             </Mainscreen>
@@ -86,7 +89,7 @@ const Movieborder = styled.div `
     border-radius: 3px;
     box-shadow: 0px 2px 4px 2px #0000001A;
 
-    :hover {
+    &:hover {
         cursor:pointer;
         opacity: 0.8;
     }

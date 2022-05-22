@@ -1,92 +1,97 @@
-import {useState} from 'react';
+import { useParams, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import Success from './Success';
 import Footer from './Footer';
-
-const balls = [
-    {
-        seat: 1,
-    },
-    {
-        seat: 2,
-    },
-    {
-        seat: 3,
-    },
-    {
-        seat: 4,
-    },
-    {
-        seat: 5,
-    },
-    {
-        seat: 6,
-    },
-    {
-        seat: 7,
-    }
-]
-
-function Eachseat ({ seat, setNextpage }) {
-
-    return (
-        <Ball onClick={() => setNextpage(true)}>
-            <p>{seat}</p>
-        </Ball>
-    );
-}
-
+import loading from './assets/loading.gif';
 
 export default function Seats () {
+    
+    // ESCOLHA DO ASSENTO
 
-    const [nextpage, setNextpage] = useState(false);
+    const [chairs, setChairs] = useState([]);
+    const { idSessao }  = useParams();
+
+    useEffect(() => {
+        const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/showtimes/${idSessao}/seats`);
+
+        request.then(response => {
+            setChairs(response.data.seats);
+            console.log("alo", chairs)
+        })
+    }, []);
+
+    function EachSeat ({ seats }) {
+        return (
+            <Ball>{/*Precisa acumular e levar ao sucess*/}
+                <p>{seats}</p>
+            </Ball>
+        );
+    }
+
+    // ESCOLHA DO ASSENTO
+
+
+    // DADOS DO CLIENTE NO FORM
+    const [nameForm, setNameForm] = useState('');
+    const [cpfForm, setCpfForm] = useState('');
+
+    function SubmitForm (event) {
+        event.preventDefault();
+        const data = {
+            nameForm: nameForm,
+            cpfForm: cpfForm,
+        }
+        console.log(data);
+    }
+    // DADOS DO CLIENTE NO FORM
 
     return (
         <>
-            {!nextpage ? (
-                <div>
-                    <Mainscreen>
-                        <Maintitle>
-                            <h2>Selecione o(s) assento(s)</h2>
-                        </Maintitle>
+            <Mainscreen>
+                <Maintitle>
+                    <h2>Selecione o(s) assento(s)</h2>
+                </Maintitle>
 
-                        <Seatlist>
-                            {balls.map((ball, index) => <Eachseat key={index} seat={ball.seat} setNextpage={setNextpage}/>)}
-                        </Seatlist>
+                <Seatlist>
+                {chairs.length === 0 ? 
+                        <img width="100px" height="100px" src={loading}/> 
+                        : 
+                        chairs.map((chair, index) => <EachSeat key={index} seats={chair.seats} id={chair.id}
+                    />)}
+                </Seatlist>
 
-                        <Seattypes>
-                            <Type>
-                                <BallGreen></BallGreen>
-                                <p>Selecionado</p>
-                            </Type>
-                            <Type>
-                                <BallGray></BallGray>
-                                <p>Disponível</p>
-                            </Type>
-                            <Type>
-                                <BallYellow></BallYellow>
-                                <p>Indisponível</p>
-                            </Type>
-                        </Seattypes>
+                <Seattypes>
+                    <Type>
+                        <BallGreen></BallGreen>
+                        <p>Selecionado</p>
+                    </Type>
+                    <Type>
+                        <BallGray></BallGray>
+                        <p>Disponível</p>
+                    </Type>
+                    <Type>
+                        <BallYellow></BallYellow>
+                        <p>Indisponível</p>
+                    </Type>
+                </Seattypes>
 
-                        <Form method="post" action="guardar-info-ex">
-                            <Fieldset>
-                                <Label for="nome">Nome do comprador:</Label>
-                                <Input type="text" name="nome" id="nome" placeholder="  Digite seu nome aqui." tabIndex="2"/>
-                                <Label for="nome">CPF do comprador:</Label>
-                                <Input type="text" name="nome" id="nome" placeholder="  Digite seu nome aqui." tabIndex="2"/>
-                                <Btn>
-                                    <Input type="submit" name="enviar" value="Reservar assento(s)"/>
-                                </Btn>
-                            </Fieldset>
-                        </Form>
-                    </Mainscreen>
-                    <Footer />
-                </div>
-                ) : (
-                <Success />
-            )}
+                <Form onSubmit={SubmitForm}action="guardar-info-ex-em-um-site">
+                    {nameForm}
+                    <Label htmlFor="nome">Nome do comprador:</Label>
+                    <Input type="text"  id="nome" placeholder="  Digite seu nome aqui." tabIndex="1" onChange={(e) => setNameForm(e.target.value)} value={nameForm} required />
+
+                    {cpfForm}
+                    <Label htmlFor="CPF">CPF do comprador:</Label>
+                    <Input type="text" id="CPF" placeholder="  Digite seu nome aqui." tabIndex="2" onChange={(e) => setCpfForm(e.target.value)} value={cpfForm} required />
+                    <Btn>
+                        <Button type="submit" name="enviar">Reservar assento(s)</Button>
+                    </Btn>
+
+                </Form>
+            </Mainscreen>
+            <Footer />                
         </>
     );
 }
@@ -143,7 +148,7 @@ const Ball = styled.div `
     font-size: 11px;
     line-height: 13px;
 
-    :hover{
+    &:hover{
         cursor: pointer;
         opacity: 0.7;
     }
@@ -193,16 +198,13 @@ const BallYellow = styled(Ball)`
 // info consumidor - FORM
 
 const Form = styled.form`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     width: 375px;
     height: 256px;
     font-size: 18px;
     padding: 0 10px 0 10px;
-`
-
-const Fieldset = styled.fieldset`
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
 `
 
 const Label = styled.label`
@@ -228,19 +230,18 @@ const Input = styled.input`
     }
 `
 
-
 const Btn = styled.div`
     height: 75px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+`
 
-    input {
+const Button = styled.button`
     height: 42px;
     width: 225px;
     background-color: #E8833A;
     border: none;
     color: white;
-}
 `
