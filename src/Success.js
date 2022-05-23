@@ -1,8 +1,11 @@
-
-import axios from 'axios';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 
-export default function Success () {
+export default function Success ({ confirmation }) {
+
+    const  {filme, sessaoDia, sessaoHora, assentos, compradorNome, compradorCPF}  = confirmation;
+    
+    console.log(assentos);
 
     return (
         <>
@@ -13,20 +16,21 @@ export default function Success () {
                 <Pedidolist>
                     <Infotitle>
                         <h3>Filme e sessão</h3>
-                        <p>Enola Holmes</p>
-                        <p>24/06/2021 15:00</p>
+                        <p>{filme}</p>
+                        <p>{sessaoDia} {sessaoHora}</p>
                     </Infotitle>
                     <Infotitle>
                         <h3>Ingressos</h3>
-                        <p>Assento 15</p>
-                        <p>Assento 16</p>
+                        {assentos.map((numAssento, index) => <p key={index}>Assento {numAssento}</p> )}
                     </Infotitle>
                     <Infotitle>
                         <h3>Comprador</h3>
-                        <p>Nome: João da Silva Sauro</p>
-                        <p>CPF: 123.456.789-10</p>
+                        <p>Nome: {compradorNome}</p>
+                        <p>CPF: {compradorCPF}</p>
                     </Infotitle>
-                    <Button>Voltar para home</Button>
+                    <Link to={`/`}>
+                        <Button>Voltar para home</Button>
+                    </Link>
                 </Pedidolist>
             </Mainscreen>
         </>

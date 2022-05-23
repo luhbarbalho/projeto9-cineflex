@@ -43,7 +43,7 @@ export default function Start() {
                     <h2>Selecione o filme</h2>
                 </Maintitle>
                 <Movieslist>
-                    {movies.length === 0 ? <img width="100px" height="100px" src={loading}/> :
+                    {movies.length === 0 ? <img width="100px" height="100px" src={loading} alt="loading"/> :
                         movies.map(movie => <EachMovie key={movie.id}  posterURL={movie.posterURL} title={movie.title} id={movie.id}
                     />)}
                 </Movieslist>

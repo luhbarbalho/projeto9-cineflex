@@ -1,6 +1,6 @@
 // import { useState } from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-
+import { useState } from 'react';
 import Header from './Header';
 import Start from './Start'
 import Timetable from './Timetable';
@@ -11,7 +11,7 @@ import Success from './Success';
 
 export default function App() {
 
-    // const [visible, setVisible] = useState(true);
+    const [confirmation, setConfirmation] = useState("");
 
     // Todo o App deve estar dentro de BrowserRouter
 
@@ -29,9 +29,9 @@ export default function App() {
 
                 <Route path="/sessoes/:idFilme" element={<Footer />}/>
 
-                <Route path="/assentos/:idSessao" element={<Seats />}/>
+                <Route path="/assentos/:idSessao" element={<Seats completed={(confirmation) => setConfirmation(confirmation)} />}/>
 
-                <Route path="/sucesso" element={<Success />}/>
+                <Route path="/sucesso" element={<Success confirmation={confirmation}/>}/>
 
             </Routes>
         </BrowserRouter>

@@ -1,24 +1,22 @@
 import styled from 'styled-components'
-// import { useParams, Link } from 'react-router-dom';
-// import axios from 'axios';
-// import { useState, useEffect } from 'react';
-// import Footer from './Footer'
-// import loading from './assets/loading.gif';
+import Start from './Start';
+import { useState, useEffect } from 'react';
 
-export default function Footer () {
+
+export default function Footer ({ posterURL, title, id, movie, schedule }) {
 
 
     return (
         <>
             <Footers>
                 <Cart>
-                    {/* <Movieborder>
+                    <Movieborder>
                         <Picture>
                             {movie.posterURL}
                         </Picture>
                     </Movieborder>
                     <MovieInfo><p>{movie.title}</p>
-                    <p>{schedule.weekday} - {schedule.name}</p></MovieInfo> */}
+                    <p>{schedule.weekday} - {schedule.name}</p></MovieInfo>
                 </Cart>
             </Footers>
         </>
