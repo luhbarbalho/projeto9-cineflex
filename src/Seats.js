@@ -2,16 +2,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
-import Footer from './Footer';
 import EachSeat from './EachSeat';
 import loading from './assets/loading.gif';
 
-export default function Seats ({ completed, movie, schedule, showtime, title, weekday, name }) {
+
+export default function Seats ({ completed, seatNumber }) {
     
     // ESCOLHA DO ASSENTO
-
+    const [selected, setSelected] = useState(false);
+    const [selection, setSelection] = useState([]);
     const [chairs, setChairs] = useState([]);
-    // const [isSelected, setIsSelected] = useState([]); //para escolha dos assentos
+    // const [isSelected, setIsSelected] = useState([]); para escolha dos assentos
     const [nameForm, setNameForm] = useState('');
     const [cpfForm, setCpfForm] = useState('');
     const navigate = useNavigate();
@@ -32,39 +33,32 @@ export default function Seats ({ completed, movie, schedule, showtime, title, we
 
     }, []);
 
-
+    console.log('assento', seatNumber)
     // DADOS DO CLIENTE NO FORM
 
     function SubmitForm (event) {
         event.preventDefault();
         console.log(nameForm)
 
-        const promise = axios.post(`https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many`,{
+        const sendForm = axios.post(`https://mock-api.driven.com.br/api/v5/cineflex/seats/book-many`,{
             ids: [5],
             name: nameForm,
             cpf: cpfForm
         });
 
-        promise.then(response => {
+        sendForm.then(response => {
             completed({
-                filme: movie.title,
-                sessaoDia: schedule.weekday,
-                sessaoHora: showtime.name,
-                assentos: [5, 6],
-                compradorNome: nameForm,
-                compradorCPF: cpfForm
-
-
+                
                 // filme: movie.title,
                 // sessaoDia: schedule.weekday,
                 // sessaoHora: showtime.name,
-                // assentos: [5, 6],
-                // compradorNome: nameForm,
-                // compradorCPF: cpfForm
-            });
+                assentos: seatNumber,
+                compradorNome: nameForm,
+                compradorCPF: cpfForm
+            })
 
             navigate(`/sucesso`);
-        });
+        })  
     }
 
 
@@ -88,9 +82,11 @@ export default function Seats ({ completed, movie, schedule, showtime, title, we
                         return(
                             <EachSeat
                             key={id}
+                            id={id}
                             seatNumber={name}
                             available={isAvailable}
-                            selected={false}
+                            selected ={selected}
+                            setSelected ={setSelected}
                             />
                         )})
                     }
@@ -126,8 +122,7 @@ export default function Seats ({ completed, movie, schedule, showtime, title, we
                     </Btn>
 
                 </Form>
-            </Mainscreen>
-            <Footer />                
+            </Mainscreen>               
         </>
     );
 }

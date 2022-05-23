@@ -6,9 +6,16 @@ import loading from './assets/loading.gif';
 
 function EachMovie ({ posterURL, title, id }) {
 
+    const [movieClicado, setMovieClicado] = useState("")
+    
+    function EscolhaMovie (movieClicado) {
+        setMovieClicado(id);
+        console.log("id", movieClicado);
+    }
+
     return (
         <Link to={`/sessoes/${id}`}>
-            <Movieborder>
+            <Movieborder onClick={() => EscolhaMovie(id)}>
                 <Picture>
                     <img src={posterURL} alt={title}/>
                 </Picture>
@@ -18,15 +25,14 @@ function EachMovie ({ posterURL, title, id }) {
     );
 }
 
-export default function Start() {
+export default function Start(props) {
 
-    const [movies, setMovies] = useState([]);
 
     useEffect(() => {
         const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies`);
 
         request.then(response => {
-            setMovies([...response.data])
+            props.setMovies([...response.data])
         })
         
         request.catch((err) => {
@@ -43,9 +49,11 @@ export default function Start() {
                     <h2>Selecione o filme</h2>
                 </Maintitle>
                 <Movieslist>
-                    {movies.length === 0 ? <img width="100px" height="100px" src={loading} alt="loading"/> :
-                        movies.map(movie => <EachMovie key={movie.id}  posterURL={movie.posterURL} title={movie.title} id={movie.id}
-                    />)}
+                    {props.movies.length === 0 ? <img width="100px" height="100px" src={loading} alt="loading"/>
+                    :
+                    props.movies.map(movie => <EachMovie key={movie.id}  posterURL={movie.posterURL} title={movie.title} id={movie.id}
+                    />)
+                    }
                 </Movieslist>
             </Mainscreen>
         </>

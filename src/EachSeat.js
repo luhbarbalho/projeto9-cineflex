@@ -1,13 +1,32 @@
 
 import styled from 'styled-components';
 
-export default function EachSeat ({ seatNumber, name, id, selected, available, isAvailable }) {
+
+export default function EachSeat ({ seatNumber, id, selected, available, SelectSeat, selection, setSelection}) {
+
+
+    function Selection () {
+        selected={selected}
+        id={id}
+        seatNumber={seatNumber}
+        console.log(id, seatNumber)
+    }
+
+    function SelectSeat (){
+
+        available
+        ?
+        Selection()
+        : 
+        alert("Este assento não está mais disponível");
+    }
+    
 
     return(
         <Ball 
         available={available}
         selected={selected}
-        onClick={selectSeat}
+        onClick={SelectSeat}
         >
             <p>
                 {seatNumber}
@@ -16,10 +35,6 @@ export default function EachSeat ({ seatNumber, name, id, selected, available, i
     );
 }
 
-function selectSeat({ seatNumber }){
-    console.log(seatNumber)
-    
-}
 
 
 const Ball = styled.div `
@@ -39,10 +54,9 @@ const Ball = styled.div `
 
     &:active{
         box-shadow: 0px 0px 1.7px 1.7px #b4b4b480;
-        /* transform: translateY(1px); tirar?*/
     }
     &:hover{
         cursor: pointer;
-        filter: brightness(1.1);//tirar?
+        background-color: #f3eb76;
     }
 `

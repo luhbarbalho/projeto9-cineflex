@@ -1,11 +1,9 @@
 import { Link } from 'react-router-dom';
 import styled from 'styled-components'
 
-export default function Success ({ confirmation }) {
+export default function Success ({confirmation}) {
 
     const  {filme, sessaoDia, sessaoHora, assentos, compradorNome, compradorCPF}  = confirmation;
-    
-    console.log(assentos);
 
     return (
         <>
@@ -17,18 +15,18 @@ export default function Success ({ confirmation }) {
                     <Infotitle>
                         <h3>Filme e sessão</h3>
                         <p>{filme}</p>
-                        <p>{sessaoDia} {sessaoHora}</p>
+                        <p>{sessaoDia} - {sessaoHora}</p>
                     </Infotitle>
                     <Infotitle>
                         <h3>Ingressos</h3>
-                        {assentos.map((numAssento, index) => <p key={index}>Assento {numAssento}</p> )}
+                        {/* {assentos.map((numAssento, index) => <p key={index}>Assento {numAssento}</p> )} */}
                     </Infotitle>
                     <Infotitle>
                         <h3>Comprador</h3>
                         <p>Nome: {compradorNome}</p>
                         <p>CPF: {compradorCPF}</p>
                     </Infotitle>
-                    <Link to={`/`}>
+                    <Link to={'/'}>
                         <Button>Voltar para home</Button>
                     </Link>
                 </Pedidolist>

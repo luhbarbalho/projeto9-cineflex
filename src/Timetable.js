@@ -2,11 +2,12 @@ import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import styled from 'styled-components'
-import Footer from './Footer'
 import loading from './assets/loading.gif';
 
 
-export default function Timetable () {
+export default function Timetable (props) {
+
+    const { idFilme }  = useParams();
     
 
     function EachTime ({ weekday, id, date, name, showtimes}) {
@@ -15,16 +16,15 @@ export default function Timetable () {
                 <p>{weekday} - {date}</p> 
                 
                 {showtimes.length === 0 ? 
-                        <img width="100px" height="100px" src={loading} alt="loading"/> 
-                        
-                        : 
+                    <img width="100px" height="100px" src={loading} alt="loading"/> 
 
-                        showtimes.map(showtime => <EachButton key={showtime.id} name={showtime.name} id={showtime.id}
+                    : 
+
+                    showtimes.map(showtime => <EachButton key={showtime.id} name={showtime.name} id={showtime.id}
                     />)} 
             </Timeoption>
         );
     }
-
 
     function EachButton ({ name, id, showtimes } ){
         return (
@@ -34,15 +34,20 @@ export default function Timetable () {
         );
     }
 
-    const [schedules, setSchedules] = useState([]);
-    const { idFilme }  = useParams();
+    function EachFoot (posterURL) {
+        <Movieborder>
+            <Picture>
+                {posterURL}
+            </Picture>
+        </Movieborder>
+    }
 
     useEffect(() => {
         const request = axios.get(`https://mock-api.driven.com.br/api/v5/cineflex/movies/${idFilme}/showtimes`);
 
         request.then(response => {
-            setSchedules([...response.data.days])
-            console.log('entrou', schedules)
+            props.setSchedules([...response.data.days])
+            console.log('entrou', props.schedules)
         });
         request.catch((err) => {
             alert("ops!");
@@ -59,16 +64,27 @@ export default function Timetable () {
                     <h2>Selecione o horário</h2>
                 </Maintitle>
                 <Timetablelist>
-                    {schedules.length === 0 ? 
+                    {props.schedules.length === 0 ? 
                         <img width="100px" height="100px" src={loading} alt="loading"/> 
                         
                         : 
 
-                        schedules.map(schedule => <EachTime key={schedule.id} weekday={schedule.weekday} date={schedule.date} showtimes={schedule.showtimes}
-                    />)}
+                        props.schedules.map(schedule => <EachTime key={schedule.id} weekday={schedule.weekday} date={schedule.date} showtimes={schedule.showtimes}
+                    />)
+                    }
                 </Timetablelist>
             </Mainscreen>
-            <Footer />
+            {/* <Footer>
+                <Cart>
+                    <Movieborder>
+                        <Picture>
+                            {movie.posterURL}
+                        </Picture>
+                    </Movieborder>
+                    <MovieInfo><p>{movie.title}</p>
+                    <p>{schedule.weekday} - {schedule.name}</p></MovieInfo>
+                </Cart>
+            </Footer> FAZER O FOOTER */}
         </>
     );
 }
@@ -134,5 +150,28 @@ const Timeoption = styled.div `
     button:hover {
         cursor:pointer;
         opacity: 0.7;
+    }
+`
+
+const Movieborder = styled.div `
+    width: 64px;
+    height: 89px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 14px 0 10px;
+    background-color: rgb(255, 240, 240);
+    border-radius: 3px;
+    box-shadow: 0px 2px 4px 2px #0000001A;
+`
+
+const Picture = styled.div `
+    width: 48px;
+    height: 72px;
+    background-color: rgb(9, 117, 81);
+
+    img {
+        width: 129px;
+        height: 193px;
     }
 `
